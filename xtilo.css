@@ -1,0 +1,98 @@
+#titulo{
+    font-family: "Iceberg", sans-serif;
+    color: #2cb4a2ee;
+}
+#subtitulo{
+    font-size: 1.25em;
+    font-family: sans-serif;
+    color: #2cb4a2c0;
+}
+form{
+    font-family: sans-serif;
+}
+body{
+    background-color:  #218d7fc0;
+    color: #535353;
+    margin-top: 1%;
+}
+#container{
+    background-color:#D2EFF7;
+    width: 400px;
+    padding: 30px 60px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+}
+input, select, textarea, button{
+    border-radius: 6px;
+}
+.campo label{
+    margin-bottom: 0.2em;
+    color: #3d3d3d;
+    display: block;
+}
+.campo input[type="text"], .campo input[type="email"], .campo select, .campo textarea{
+    padding: 0.2em;
+    border: 1.5px solid #218d7fc0;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+}
+.campo select option{
+    padding-right: 1em;
+}
+.campo input:focus, .campo select:focus, campo textarea:focus{
+    background: #dde1e2;
+}
+button{
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    font-size: 1.0em;
+    border: 1.5px solid #3d3d3d;
+    color: #3d3d3d;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+button:hover{
+    background-color: #2cb4a2c0;
+    border: 1.5px solid #3d3d3d;
+}
+#campo1{
+    align-items: center;
+}
+#campo2{
+    display: flex;
+    justify-content: center;
+}
+#email1{
+    margin-left: 2em;
+}
+#campo3{
+    display: flex;
+    justify-content: center;
+}
+#serie1{
+    margin: 1.5em 2em 1.5em 1em;
+}
+#curso1{
+    margin: 1.5em 1em 1.5em 2em;
+}
+#img{
+    display: flex;
+    justify-content: center;
+}
+textarea{
+    margin-top: 0.75em;
+    margin-bottom: 1em;
+}
+#sn{
+    margin-top: 0.5em;
+    margin-left: 4.25em;
+    float: left;
+}
+#botao{
+    margin-top: 0.5em;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="xtilo.css" type="text/css">
+    <link rel="icon" href="imgs/1-1a311c7m-fotor-2025101994443.png" type="imgs/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Iceberg&display=swap" rel="stylesheet">
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+    </script>
+    <script>
+        function SubForm (){
+            event.preventDefault();
+            $.ajax({
+                url:'https://api.apispreadsheets.com/data/OCrsgqzoFxeLivBH/',
+                type:'post',
+                data:$("#meuForm").serializeArray(),
+                headers:{
+					accessKey: "5cae0de2fe3ce2abd6fce19ab80fdbe5",
+					secretKey: "62c4fbd7014001ef580ef04398933540"},
+                success: function(){
+                  alert("INSCRIÇÃO REALIZADA! Clique na imagem da TOM para retornar à página principal ;)")
+                },
+                error: function(){
+                  alert("Algo deu errado... Tente novamente :(")
+                }
+            });
+        }
+    </script>
+    <title>TOM - Processo seletivo</title>
+</head>
+<body>
+    <div id="container">
+        <a href="./index.html" id="img">
+            <img src="Imagens/2-1a311c7a-removebg-preview.png" alt="Logo_TOM" width="240" height="120">
+        </a>
+        <div>
+            <h1 id="titulo">- Formulário de inscrição -<br> PROCESSO SELETIVO</h1>
+            <h3 id="subtitulo">Complete com suas informações</h3>
+        </div>
+        <form id="meuForm" onsubmit="SubForm()">
+        
+                <div class="campo" id="campo2">
+                    <div id="nome1">
+                        <label for="nome"><strong>Nome completo</strong></label>
+                        <input placeholder="Nome Sobrenome" type="text" name="nome" id="nome" required>
+                    </div>
+                    <div id="email1">
+                        <label for="email"><strong>Email</strong></label>
+                        <input placeholder="aluno@email.com" type="email" name="email" id="email" required>
+                    </div>
+                </div>
+
+                <div class="campo" id="campo3">
+                    <div id="serie1">
+                        <label for="serie">Qual sua <strong>série</strong>?</label>
+                        <select name="serie" id="serie">
+                            <option value="1">1º ano</option>
+                            <option value="2">2º ano</option>
+                            <option value="3">3º ano</option>
+                        </select>
+                    </div>
+                    <div id="curso1">
+                        <label for="curso">Qual seu <strong>curso</strong>?</label>
+                        <select name="curso" id="curso">
+                            <option value="moda">Produção de moda</option>
+                            <option value="meca">Mecatrônica</option>
+                            <option value="ti">Informática</option>
+                        </select>
+                    </div>
+                </div>
+        
+            <div class="campo" id="campo1">
+                <label for="simnao" aria-required="">Já participou de alguma olimpíada de matemática? <br>Se sim, qual(is)?</label>
+                <div id="sn">
+                    <input type="radio" name="simnao" value="sim" id="s">Sim
+                    <br>
+                    <input type="radio" name="simnao" value="nao" id="n">Não
+                </div>
+                <textarea placeholder="De quais você já participou?" name="olimpiada"></textarea>
+            </div>
+            <div id="botao">
+                <button class="botao" type="submit"">Finalizar inscrição</button>
+                <button class="botao" type="reset">Limpar formulário</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
