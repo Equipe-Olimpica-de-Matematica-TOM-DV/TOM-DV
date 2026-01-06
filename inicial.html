@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1024">
+  <title>TOM-DV</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="imagens/22-1a311c7a-removebg.png">
+</head>
+
+<body>
+  <header>
+   <div class="brand">
+  <h1 style="display:inline-block;">
+    <a href="inicial.html">TOM-DV</a>
+  </h1>
+  <img src="imagens/2-1a311c7a-removebg.png" 
+       alt="Logo TOM" 
+       style="display:inline-block; height:50px; width:auto; vertical-align:middle; margin-left:0px;">
+  </div>
+    <nav> 
+      <a href="Noticias.html">Noticias</a>
+      <a href="Calendario.html">Calendario</a>
+      <a href="Materiais.html">Materiais</a>
+      <a href="Avisos.html">Avisos</a>
+    </nav>
+    <!-- Botão só com ícone -->
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <!-- Caixa lateral com opções -->
+  <div class="menu-options" id="menu">
+    <div class="submenu">
+      <strong>Redirecionar</strong>
+      <a href="index.html">Sobre a TOM</a>
+      <a href="https://www.divinopolis.cefetmg.br/">Instituição</a>
+      <a href="index.html">Integrantes & Cordenadores</a>
+      <a href="#">Olimpíadas</a>
+      <a href="#">Processo seletivo TOM</a>
+    </div>
+    <div class="submenu">
+      <strong>Opcões</strong>
+       <a href="https://script.google.com/macros/s/AKfycbxJcPIGV_UcgZwsoYxYrlfsVwtTYmJ8uDDX69zoOc76JC3Z6IGMAXNaV_dJXfzRD6UG/exec">Login Root</a>
+    <a href="#">Feedback</a>  
+    <a href="#">Ajuda</a>
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <main id="news-list"></main>
+  <script>
+  // === CONFIGURAÇÃO ===
+  const API_URL = "https://script.google.com/macros/s/AKfycbyx9UvfNRlVC6TxBfEjel38U0aWUcuM1Jr8kTGfeVfLvrl3RAtiTTsPb6zGr2oI8S_U/exec";
+
+  // Lê o nome da aba da query string (?aba=Avisos). Se não vier, usa "Inicial".
+  function getAbaFromQuery() {
+    const params = new URLSearchParams(window.location.search);
+    const aba = params.get("aba");
+    return (aba && aba.trim()) ? aba.trim() : "inicial";
+  }
+
+  async function carregarBlocos() {
+    const container = document.getElementById("news-list");
+    if (!container) {
+      console.error('Elemento #news-list não encontrado no HTML.');
+      return;
+    }
+
+    // Mensagem de carregamento
+    container.innerHTML = `<p><em>Carregando...</p>`;
+
+    const nomeAba = getAbaFromQuery();
+    const url = `${API_URL}?aba=${encodeURIComponent(nomeAba)}`;
+    console.log('Buscando dados da aba:', nomeAba, 'URL:', url);
+
+    try {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const dados = await res.json();
+
+      // Validação básica do retorno
+      if (!Array.isArray(dados)) {
+        console.warn('Retorno não é um array:', dados);
+        container.innerHTML = "<p>Nenhum conteúdo encontrado.</p>";
+        return;
+      }
+
+      // Normaliza e limpa espaços nas propriedades
+      const pubs = dados.map(item => {
+        const clean = {};
+        Object.keys(item).forEach(k => clean[k.trim()] = item[k]);
+        // Garante campos esperados
+        return {
+          bloco: (clean.bloco || "").trim(),
+          id: clean.id ?? "",
+          titulo: clean.titulo ?? "Sem título",
+          conteudo: clean.conteudo ?? "",
+          data: clean.data ?? ""
+        };
+      });
+
+      // Agrupa por bloco
+      const blocos = [...new Set(pubs.map(p => p.bloco).filter(b => b))];
+      container.innerHTML = "";
+
+      if (blocos.length === 0) {
+        container.innerHTML = "<p>Sem conteúdos nesta aba.</p>";
+        return;
+      }
+
+      // Renderiza cada bloco com seus cards
+      blocos.forEach(b => {
+        const secao = document.createElement("section");
+        secao.className = "bloco";
+
+        const header = document.createElement("h2");
+        header.textContent = b;
+        secao.appendChild(header);
+
+        const itens = pubs.filter(p => p.bloco === b);
+        if (itens.length === 0) {
+          const vazio = document.createElement("p");
+          vazio.textContent = "Sem conteúdos neste bloco.";
+          secao.appendChild(vazio);
+        } else {
+          itens.forEach(pub => {
+            const card = document.createElement("div");
+            card.className = "news-card";
+
+            // Conteúdo vindo do Summernote é HTML: usar innerHTML para renderizar formatado
+            card.innerHTML = `
+              <div class="news-content">
+                <h3>${pub.titulo}</h3>
+                <small>${formatarData(pub.data)}</small>
+                <div class="content">${pub.conteudo}</div>
+              </div>
+            `;
+            secao.appendChild(card);
+          });
+        }
+
+        container.appendChild(secao);
+      });
+    } catch (err) {
+      console.error('Erro ao carregar:', err);
+      container.innerHTML = "<p>Erro ao carregar publicações.</p>";
+    }
+  }
+
+  // Formata a data (YYYY-MM-DD → DD/MM/YYYY). Se não vier, retorna “Sem data”.
+  function formatarData(str) {
+    if (!str) return "Sem data";
+    // Tenta parsear data ISO
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('pt-BR');
+    }
+    // Fallback para YYYY-MM-DD
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
+    if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+    return str;
+  }
+
+  // Inicializa
+  document.addEventListener('DOMContentLoaded', carregarBlocos);
+</script>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      const overlay = document.getElementById("overlay");
+      menu.classList.toggle("active");
+      overlay.classList.toggle("active");
+    }
+  </script>
+  
+</body>
+</html>
