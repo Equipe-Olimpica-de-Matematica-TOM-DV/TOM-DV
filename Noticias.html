@@ -46,10 +46,13 @@
   </div>
 
   
-  <main id="news-list"></main>
+
+  
+
+    <main id="news-list"></main>
   <script>
   // === CONFIGURAÇÃO ===
-  const API_URL = "";
+  const API_URL = "https://script.google.com/macros/s/AKfycbyx9UvfNRlVC6TxBfEjel38U0aWUcuM1Jr8kTGfeVfLvrl3RAtiTTsPb6zGr2oI8S_U/exec";
 
   // Lê o nome da aba da query string (?aba=Avisos). Se não vier, usa "Inicial".
   function getAbaFromQuery() {
@@ -66,7 +69,7 @@
     }
 
     // Mensagem de carregamento
-    container.innerHTML = `<p><em>carregando conteúdo ...</p>`;
+    container.innerHTML = `<p>Carregando...</p>`;
 
     const nomeAba = getAbaFromQuery();
     const url = `${API_URL}?aba=${encodeURIComponent(nomeAba)}`;
